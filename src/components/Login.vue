@@ -75,9 +75,7 @@ export default {
     login() {
       userService.login(this.user)
         .then(() => {
-          // this.alert("You successfully logged in.");
-
-          this.$navigateTo(HelloWorld);
+          this.$navigateTo(Recipes);
         })
         .catch(() => {
           this.alert("Unfortunately we could not find your account.");
