@@ -1,29 +1,46 @@
 <template>
-  <Page class="page">
-    <GridLayout ref='container' rows="auto, auto, *" class="list-page">
+  <Page>
+    <FlexboxLayout class="page">
       <!-- Row 1: The custom action bar -->
-      <GridLayout row="0" columns="44, *, auto" class="action-bar-custom">
-        <Label col="1" text="Recipes"></Label>
+      <FlexboxLayout class="app-bar">
+        <!-- <Label text="Recipes"></Label> -->
+        <Image class="app-bar__logo" src="~/images/logo-white.png" />
 
         <!-- Wrap the image in a StackLayout to give it a bigger tap target -->
-        <StackLayout col="2" @tap="showMenu()" class='menu-button-container'>
-          <Label class="huhu" text="Lorem ipsum dolor." />
-          <Image src="~/images/menu@2x.png" stretch="none" />
+        <StackLayout @tap="showMenu()" class='menu-button-container'>
+          <Image src="res://menu" stretch="none" />
         </StackLayout>
-      </GridLayout>
-    </GridLayout>
+      </FlexboxLayout>
 
-    <Label class="huhu" text="Lorem ipsum dolor." @tap="showMenu()" />
+      <ListView
+        for="recipe in recipes"
+        class="list-group recipes-list"
+        @itemTap="onItemTap"
+        @loadMoreItems="onLoadMoreItems"
+      >
+        <v-template>
+          <StackLayout orientation="horizontal" class="list-group-item">
+            <StackLayout>
+              <Label class="list-group-item-heading" :text="recipe.name" textWrap="true" />
+              <!-- <Label class="list-group-item-text" :text="recipe.description" textWrap="true" /> -->
+            </StackLayout>
+          </StackLayout>
+        </v-template>
+      </ListView>
 
+      <ActivityIndicator :busy="isLoading"></ActivityIndicator>
+    </FlexboxLayout>
   </Page>
 </template>
 
 <script>
 import { action } from 'ui/dialogs'
 import UserService from "../services/UserService";
+import RecipeService from "../services/RecipeService";
 import Login from '../components/Login'
 
 const userService = new UserService();
+const recipeService = new RecipeService();
 
 export default {
   components: {
@@ -32,8 +49,14 @@ export default {
 
   data () {
     return {
-      surprise: false,
+      isLoading: false,
+      page: 1,
+      recipes: [],
     };
+  },
+
+  created() {
+    this.fetchItems();
   },
 
   methods: {
@@ -47,39 +70,51 @@ export default {
       });
     },
 
-    logout() {
-      console.log('LoginService: ', userService.token);
-      userService.logout()
-      console.log('LoginService: ', userService.token);
+    refresh() {
+      this.recipes = []
+      this.page = 1
+      this.fetchItems()
+    },
 
+    fetchItems() {
+      if (this.isLoading) {
+        return;
+      }
+
+      // console.log(this.isLoading, 'loading before');
+      // this.isLoading = true;
+      // console.log(this.isLoading, 'loading after');
+
+      recipeService.fetchItems(this.page)
+        .then((response) => {
+          response.data.forEach(item => {
+            this.recipes.push(item);
+          });
+
+          console.log(this.page);
+          this.page++;
+          this.isLoading = false;
+          // console.log(this.isLoading, 'loading in then callback', this.recipes);
+        })
+        .catch(() => {
+          this.alert('Unfortunately we could not load the recipes.');
+        });
+    },
+
+    onItemTap(e) {
+      console.log('recipe is tapped!');
+    },
+
+    onLoadMoreItems(e) {
+      console.log('Loading more items')
+
+      return this.fetchItems();
+    },
+
+    logout() {
+      userService.logout()
       this.$navigateTo(Login)
     },
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.list-page {
-  background: tomato;
-
-  .action-bar-custom {
-    color: black;
-    margin-top: 20;
-    padding-top: 12;
-    padding-bottom: 12;
-
-    Label {
-      font-size: 21;
-      font-weight: bold;
-    }
-
-    StackLayout {
-      height: 40;
-      padding-left: 15;
-      padding-right: 15;
-      vertical-align: center;
-      horizontal-align: center;
-    }
-  }
-}
-</style>

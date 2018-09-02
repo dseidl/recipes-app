@@ -1,4 +1,5 @@
 import Vue from 'nativescript-vue';
+import http from 'http';
 
 import BackendService from './services/BackendService'
 
@@ -12,6 +13,9 @@ const backendService = new BackendService();
 
 // Uncomment the following to see NativeScript-Vue output logs
 //Vue.config.silent = false;
+
+Vue.config.debug = true
+Vue.prototype.$http = http
 
 new Vue({
 
