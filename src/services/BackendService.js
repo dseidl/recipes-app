@@ -8,29 +8,24 @@ export default class BackendService {
   }
 
   get token() {
-    console.log('GETTING TOKEN: ' + getString(tokenKey))
     return getString(tokenKey);
   }
 
   set token(newToken) {
     setString(tokenKey, newToken);
-    console.log('TOKEN SET TO: ' + newToken)
   }
 
   isLoggedIn() {
-    console.log('GETTING TOKEN LOGGED IN: ' + getString(tokenKey))
     return !!getString(tokenKey);
   }
 
   getJson(response) {
     return new Promise((resolve, reject) => {
-      console.info('Content: ' + response.content.toString())
       resolve(response.content.toJSON())
     })
-      .catch(e => {
-        console.error('Error parsing JSON response: ' + e)
-        throw 'Error parsing JSON response: ' + e
-      })
+    .catch(e => {
+      throw 'Error parsing JSON response: ' + e
+    })
   }
 
   validateCode(response) {
@@ -38,10 +33,6 @@ export default class BackendService {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         resolve(response)
       }
-      console.log('Response with code: ' + response.statusCode +
-        '\nContent: ' + response.content.toString())
-      reject('Response with code: ' + response.statusCode +
-        '\nContent: ' + response.content.toString())
     })
   }
 }
