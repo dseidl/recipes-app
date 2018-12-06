@@ -1,28 +1,74 @@
 <template>
-  <Page>
+  <Page actionBarHidden="true">
     <FlexboxLayout class="page">
       <!-- Row 1: The custom action bar -->
-      <FlexboxLayout class="app-bar">
-        <!-- <Label text="Recipes"></Label> -->
-        <Image class="app-bar__logo" src="~/images/logo-white.png" />
+      <FlexboxLayout class="app-bar" flexDirection="row" justifyContent="space-between">
+        <FlexboxLayout>
+          <Image class="app-bar__logo" src="~/images/logo-white.png" />
+        </FlexboxLayout>
 
-        <!-- Wrap the image in a StackLayout to give it a bigger tap target -->
-        <StackLayout @tap="showMenu()" class='menu-button-container'>
-          <Image src="res://menu" stretch="none" />
-        </StackLayout>
+        <FlexboxLayout @tap="showMenu()" class='' paddingTop="10">
+          <Image src="res://menu" class="app-bar__dots" stretch="none" />
+        </FlexboxLayout>
       </FlexboxLayout>
 
       <ListView
-        for="recipe in recipes"
+        for="(recipe, index) in recipes"
+        :key="index"
         class="list-group recipes-list"
+        flexGrow="2"
         @itemTap="onItemTap"
         @loadMoreItems="onLoadMoreItems"
       >
         <v-template>
           <StackLayout orientation="horizontal" class="list-group-item">
             <StackLayout>
-              <Label class="list-group-item-heading" :text="recipe.name" textWrap="true" />
+              <Label class="list-group-item-heading" :text="recipe.title" textWrap="true" />
               <!-- <Label class="list-group-item-text" :text="recipe.description" textWrap="true" /> -->
+              <StackLayout orientation="horizontal" marginTop="10">
+                <StackLayout>
+                  <Image
+                    v-if="recipe.isMeat == true"
+                    class="recipes-list__icon"
+                    src="res://meat"
+                  />
+                </StackLayout>
+                <StackLayout>
+                  <Image
+                    v-if="recipe.isVegetarian == true"
+                    class="recipes-list__icon test"
+                    src="res://vegetarian"
+                  />
+                </StackLayout>
+                <StackLayout>
+                  <Image
+                    v-if="recipe.isVegan == true"
+                    class="recipes-list__icon test"
+                    src="res://vegan"
+                  />
+                </StackLayout>
+                <StackLayout>
+                  <Image
+                    v-if="recipe.isFish == true"
+                    class="recipes-list__icon test"
+                    src="res://fish"
+                  />
+                </StackLayout>
+                <StackLayout>
+                  <Image
+                    v-if="recipe.isLactoseFree == true"
+                    class="recipes-list__icon test"
+                    src="res://lactosefree"
+                  />
+                </StackLayout>
+                <StackLayout>
+                  <Image
+                    v-if="recipe.isGlutenFree == true"
+                    class="recipes-list__icon test"
+                    src="res://glutenfree"
+                  />
+                </StackLayout>
+              </StackLayout>
             </StackLayout>
           </StackLayout>
         </v-template>
@@ -91,7 +137,7 @@ export default {
             this.recipes.push(item);
           });
 
-          console.log(this.page);
+          // console.log('page: ' + this.page);
           this.page++;
           this.isLoading = false;
           // console.log(this.isLoading, 'loading in then callback', this.recipes);

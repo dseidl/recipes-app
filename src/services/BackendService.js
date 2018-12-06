@@ -4,7 +4,7 @@ const tokenKey = "token";
 
 export default class BackendService {
   constructor() {
-    this.baseUrl = "https://recipes.dseidl.me/"
+    this.baseUrl = "https://recipes-app.dseidl.me/"
   }
 
   get token() {

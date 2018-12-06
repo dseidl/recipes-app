@@ -11,7 +11,7 @@ export default class UserService extends BackendService {
       content: JSON.stringify({
         grant_type: 'password',
         client_id: 1,
-        client_secret: 'StCUCS0cGnrCK35mYh5cEl1tsQH4W8KQC1veklPQ',
+        client_secret: 'xB7fgKGy8VDe2aBH2QMuC53oKf2H5LEw7WfYcB1g',
         username: user.email,
         password: user.password
       }),

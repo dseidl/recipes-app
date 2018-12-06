@@ -78,25 +78,24 @@ $text-color: #A8A8A8;
   color: white;
   width: 100%;
   justify-content: space-between;
+  flex-direction: row;
+  height: 100;
 
   &__logo {
-    width: 30;
+    width: 50;
   }
 
-  Label {
-    font-size: 21;
-    font-weight: bold;
-  }
-
-  StackLayout {
-    height: 40;
-    padding-left: 15;
-    padding-right: 15;
-    vertical-align: center;
-    horizontal-align: center;
+  &__dots {
+    height: 100%;
   }
 }
 
-.recipes-list {
-  flex-grow: 2;
+.recipes-list__icon {
+  width: 35;
+  margin-right: 10;
+}
+
+.list-group-item-text {
+  font-size: 400;
+  font-weight: bold;
 }
